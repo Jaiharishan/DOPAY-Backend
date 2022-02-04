@@ -1,42 +1,24 @@
-require("dotenv").config();
-const upload = require("./routes/upload");
-const Grid = require("gridfs-stream");
-const mongoose = require("mongoose");
-const connection = require("./db");
+// importing env variables
+require("dotenv").config({ path: "./env/.env" });
+
+// importing other necessary libraries
 const express = require("express");
 const app = express();
+const cors = require("cors");
+require("./db/db");
 
-let gfs;
-connection();
+// import api and auth routes
+const apiRouter = require("./api/api");
+const authRouter = require("./api/auth");
 
-const conn = mongoose.connection;
-conn.once("open", function () {
-    gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection("photos");
-});
+// using middlewares
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(cors());
 
-app.use("/file", upload);
-
-// media routes
-app.get("/file/:filename", async (req, res) => {
-    try {
-        const file = await gfs.files.findOne({ filename: req.params.filename });
-        const readStream = gfs.createReadStream(file.filename);
-        readStream.pipe(res);
-    } catch (error) {
-        res.send("not found");
-    }
-});
-
-app.delete("/file/:filename", async (req, res) => {
-    try {
-        await gfs.files.deleteOne({ filename: req.params.filename });
-        res.send("success");
-    } catch (error) {
-        console.log(error);
-        res.send("An error occured.");
-    }
-});
+// using the imported routes
+app.use("/api", apiRouter);
+app.use("/auth", authRouter);
 
 const port = process.env.PORT || 8080;
 app.listen(port, console.log(`Listening on port ${port}...`));
