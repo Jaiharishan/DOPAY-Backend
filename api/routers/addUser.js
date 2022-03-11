@@ -44,8 +44,14 @@ router.post("/:org_id/:member_id", verifyJWT, async (req, res) => {
       });
     }
 
+    // add user id to organization
     await Organization.findByIdAndUpdate(organization_id, {
       $addToSet: { members: member_id },
+    });
+
+    // adding organization id to user
+    await User.findByIdAndUpdate(member_id, {
+      $addToSet: { organizations: organization_id },
     });
 
     return res.status(200).json({

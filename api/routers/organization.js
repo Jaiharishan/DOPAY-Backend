@@ -15,11 +15,13 @@ router.post("/create", verifyJWT, upload.single("file"), async (req, res) => {
     const user_id = req.jwt_payload._id;
 
     // const profilePicData = req.file;
-    if (req.file === undefined) return res.send("you must select a file.");
+    // if (req.file === undefined) return res.send("you must select a file.");
 
-    console.log("req file is", req.file);
-
-    const profilePic = `http://localhost:8080/api/file/${req.file.filename}`;
+    let profilePic;
+    if (req.file) {
+      // console.log("req file is", req.file);
+      profilePic = `http://localhost:8080/api/file/${req.file.filename}`;
+    }
 
     if (!name || !description || !email || !visibility) {
       res.status(400).json({
@@ -52,7 +54,7 @@ router.post("/create", verifyJWT, upload.single("file"), async (req, res) => {
       description: description,
       email: email,
       head: [user_id],
-      profilePic: profilePic,
+      profilePic: profilePic ? profilePic : "",
       visibility: visibility,
     });
 
@@ -70,6 +72,8 @@ router.post("/create", verifyJWT, upload.single("file"), async (req, res) => {
 });
 
 // get an organization
+
+// /api/organization/:id
 router.get("/:id", async (req, res) => {
   try {
     const org_id = req.params.id;
@@ -110,7 +114,7 @@ router.put("/edit/:id", verifyJWT, upload.single("file"), async (req, res) => {
     }
 
     if (!organization.heads.includes(user_id)) {
-      return res.status(400).json({
+      return res.status(404).json({
         message: "You are not the head!",
       });
     }

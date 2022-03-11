@@ -24,6 +24,7 @@ router.post("/:payment_id/create", verifyJWT, async (req, res) => {
       });
     }
 
+    // creates a transaction
     const transaction = new Transaction({
       amount: payment.amount,
       description: description,
@@ -34,6 +35,7 @@ router.post("/:payment_id/create", verifyJWT, async (req, res) => {
 
     await transaction.save();
 
+    // adds the user to the paidBy array
     await Payment.findByIdAndUpdate(payment_id, {
       $addToSet: { paidBy: user_id },
     });

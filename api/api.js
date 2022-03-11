@@ -14,11 +14,17 @@ const createTransaction = require("./routers/createTransaction");
 const getUserTransactionRouter = require("./routers/getUserTransaction");
 const getOrgTransactionRouter = require("./routers/getOrgTransaction");
 const getOrgPendingPaymentsRouter = require("./routers/getPendingPayments");
+const getUserOrganizationsRouter = require("./routers/getUserOrganizations");
+const getOrgListRouter = require("./routers/getOrgList");
+const getOrgPaymentsRouter = require("./routers/getOrgPayments");
+const getPaymentListRouter = require("./routers/getPaymentList");
+const getOrgUsersRouter = require("./routers/getOrgUsers");
 
 //use routes
 router.use("/file", imageRouter);
 router.use("/organization", organizationRouter);
 router.use("/self", verifyJWT, userRouter);
+router.use("/self", getUserOrganizationsRouter);
 router.use("/user", getUserRouter);
 router.use("/payment", paymentRouter);
 router.use("/organization/addUser", addUserRouter);
@@ -28,4 +34,9 @@ router.use("/transaction", createTransaction);
 router.use("/transaction", getUserTransactionRouter);
 router.use("/organization/transactions/", getOrgTransactionRouter);
 router.use("/organization/transactions/pending", getOrgPendingPaymentsRouter);
+router.use("/organization", getOrgListRouter);
+router.use("/organization", getOrgPaymentsRouter);
+router.use("/organization", getOrgUsersRouter);
+router.use("/payment", getPaymentListRouter);
+
 module.exports = router;

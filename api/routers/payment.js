@@ -1,10 +1,11 @@
 const Organization = require("../../db/models/Organization");
 const Payment = require("../../db/models/Payment");
+const { verifyJWT } = require("../../middleware/jwt");
 
 const router = require("express").Router();
 
 // /api/payment/org_id/create
-router.post("/:id/create", async (req, res) => {
+router.post("/:id/create", verifyJWT, async (req, res) => {
   try {
     const org_id = req.params.id;
 
@@ -83,9 +84,9 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// /api/payment/edit
+// /api/payment/edit/:payment_id
 
-router.put("/edit/:id", async (req, res) => {
+router.put("/edit/:id", verifyJWT, async (req, res) => {
   try {
     const { description, amount, deadline } = req.body;
 
@@ -121,7 +122,7 @@ router.put("/edit/:id", async (req, res) => {
 
 // /api/payment/delete/:payment_id
 
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/delete/:id", verifyJWT, async (req, res) => {
   try {
     const payment_id = req.params.id;
 

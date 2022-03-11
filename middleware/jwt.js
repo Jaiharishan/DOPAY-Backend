@@ -1,5 +1,7 @@
 require("dotenv").config({ path: "./env/.env" });
 const jwt = require("jsonwebtoken");
+
+
 const verifyJWT = (req, res, next) => {
   try {
     const { auth_token } = req.headers;
