@@ -19,6 +19,7 @@ const getOrgListRouter = require("./routers/getOrgList");
 const getOrgPaymentsRouter = require("./routers/getOrgPayments");
 const getPaymentListRouter = require("./routers/getPaymentList");
 const getOrgUsersRouter = require("./routers/getOrgUsers");
+const getSearchOrganizationsRouter = require("./routers/getSearchOrganizations");
 
 //use routes
 router.use("/file", imageRouter);
@@ -38,5 +39,6 @@ router.use("/organization", getOrgListRouter);
 router.use("/organization", getOrgPaymentsRouter);
 router.use("/organization", getOrgUsersRouter);
 router.use("/payment", getPaymentListRouter);
+router.use("/organization", getSearchOrganizationsRouter);
 
 module.exports = router;
